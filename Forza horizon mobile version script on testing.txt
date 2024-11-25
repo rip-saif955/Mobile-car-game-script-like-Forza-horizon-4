@@ -1,0 +1,39 @@
+using UnityEngine;
+
+public class CarController : MonoBehaviour
+{
+    public float acceleration = 10f;
+    public float steering = 5f;
+    public float brakeForce = 50f;
+    public Joystick joystick; // Reference to a virtual joystick (from Unity Asset Store)
+
+    private Rigidbody rb;
+
+    void Start()
+    {
+        rb = GetComponent<Rigidbody>();
+    }
+
+    void Update()
+    {
+        // Get input from joystick for steering (X-axis) and acceleration (Y-axis)
+        float move = joystick.Vertical * acceleration;
+        float turn = joystick.Horizontal * steering;
+
+        // Move the car forward and backward
+        rb.AddForce(transform.forward * move);
+
+        // Rotate the car to simulate steering
+        transform.Rotate(0, turn, 0);
+
+        // Add brake functionality (e.g., when brake button is pressed)
+        if (Input.GetButton("Fire1")) // Assume Fire1 is the brake button
+        {
+            rb.drag = brakeForce;
+        }
+        else
+        {
+            rb.drag = 1f; // Normal drag when not braking
+        }
+    }
+}
